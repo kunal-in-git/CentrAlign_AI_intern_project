@@ -6,7 +6,7 @@ A prototype AI worker that takes a natural-language task, decides which actions 
 >
 > The agent searches the source invoices, picks the newest one, reads it, saves it to the internal system, verifies the saved record, and returns a summary with step-by-step evidence.
 
-**Demo video:** _add link here_
+**Demo video:** [demo/centralign-task-worker-demo.mp4](demo/centralign-task-worker-demo.mp4) (about 4 min, captioned, no audio). Waiting time for the local CPU model is sped up and labelled with the real elapsed time.
 
 ---
 
