@@ -22,12 +22,92 @@ SEED_INVOICES = [
         "October support invoice",
     ),
     (
+        "INV-ACME-0998",
+        "Acme Corp",
+        "2026-08-01",
+        990.00,
+        "2026-08-31",
+        "August services invoice",
+    ),
+    (
         "INV-NORTH-2001",
         "Northwind Ltd",
         "2026-10-05",
         920.00,
         "2026-10-28",
         "Office supplies invoice",
+    ),
+    (
+        "INV-NORTH-1987",
+        "Northwind Ltd",
+        "2026-09-12",
+        455.20,
+        "2026-10-12",
+        "Printer toner and paper",
+    ),
+    (
+        "INV-ACMELOG-3001",
+        "Acme Logistics",
+        "2026-10-07",
+        3120.00,
+        "2026-11-06",
+        "Freight and warehousing, October",
+    ),
+    (
+        "INV-ACMELOG-2990",
+        "Acme Logistics",
+        "2026-09-08",
+        2875.50,
+        "2026-10-08",
+        "Freight and warehousing, September",
+    ),
+    (
+        "INV-GLOBEX-4100",
+        "Globex Industries",
+        "2026-10-09",
+        12500.00,
+        "2026-11-08",
+        "Annual software licence renewal",
+    ),
+    (
+        "INV-GLOBEX-4087",
+        "Globex Industries",
+        "2026-09-15",
+        640.00,
+        "2026-10-15",
+        "Implementation consulting hours",
+    ),
+    (
+        "INV-INITECH-501",
+        "Initech",
+        "2026-10-01",
+        78.99,
+        "2026-10-31",
+        "Monthly cloud backup subscription",
+    ),
+    (
+        "INV-STARK-7001",
+        "Stark Supplies",
+        "2026-10-10",
+        5400.00,
+        "2026-11-09",
+        "Laptops for new hires",
+    ),
+    (
+        "INV-STARK-7002",
+        "Stark Supplies",
+        "2026-10-10",
+        210.00,
+        "2026-11-09",
+        "Laptop bags and accessories",
+    ),
+    (
+        "INV-UMBRELLA-88",
+        "Umbrella Health",
+        "2026-07-20",
+        1500.00,
+        "2026-08-19",
+        "Employee health checkups",
     ),
 ]
 
@@ -69,24 +149,19 @@ def init_db():
             )
         """)
 
-        existing_count = connection.execute(
-            "SELECT COUNT(*) FROM invoices"
-        ).fetchone()[0]
-
-        if existing_count == 0:
-            connection.executemany(
-                """
-                INSERT INTO invoices (
-                    invoice_id,
-                    supplier,
-                    invoice_date,
-                    amount,
-                    due_date,
-                    description
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                SEED_INVOICES,
+        connection.executemany(
+            """
+            INSERT OR IGNORE INTO invoices (
+                invoice_id,
+                supplier,
+                invoice_date,
+                amount,
+                due_date,
+                description
             )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            SEED_INVOICES,
+        )
 
         connection.commit()

@@ -52,9 +52,20 @@ def verify_invoice_tool(invoice_id: str) -> str:
     return json.dumps(result)
 
 
+@tool(return_direct=True)
+def ask_user_tool(question: str) -> str:
+    """Pause the task and ask the user a clarifying question.
+    Use this when the request is ambiguous, when no matching invoice
+    exists, or when you cannot safely continue without more information.
+    Ask one specific question.
+    """
+    return json.dumps({"question": question})
+
+
 INVOICE_TOOLS = [
     search_invoice_tool,
     read_invoice_tool,
     save_invoice_tool,
     verify_invoice_tool,
+    ask_user_tool,
 ]

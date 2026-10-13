@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from app.agent.worker import run_task
+from app.agent.worker import continue_task, run_task
 from app.database.db import get_connection, init_db
 
 
@@ -37,6 +37,10 @@ class TaskRequest(BaseModel):
     task: str = Field(min_length=5, max_length=1000)
 
 
+class ReplyRequest(BaseModel):
+    reply: str = Field(min_length=1, max_length=1000)
+
+
 @app.get("/api/health")
 def health():
     return {
@@ -66,6 +70,24 @@ def run_task_endpoint(request: TaskRequest):
             status_code=500,
             detail=f"Task execution failed: {type(exc).__name__}: {exc}",
         ) from exc
+
+
+@app.post("/api/runs/{run_id}/reply")
+def reply_to_run_endpoint(run_id: str, request: ReplyRequest):
+    reply = request.reply.strip()
+
+    if not reply:
+        raise HTTPException(status_code=422, detail="Reply cannot be empty.")
+
+    try:
+        return continue_task(run_id, reply)
+    except KeyError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Run not found. It may have expired after a server restart.",
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @app.get("/api/invoices")

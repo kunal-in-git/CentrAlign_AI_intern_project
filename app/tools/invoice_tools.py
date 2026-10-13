@@ -11,8 +11,36 @@ def search_invoices(supplier: str, limit: int = 10) -> dict:
         return {"invoices": [], "count": 0}
 
     limit = max(1, min(limit, 20))
+    query = supplier.strip()
 
     with get_connection() as connection:
+        suppliers = [
+            row[0]
+            for row in connection.execute(
+                """
+                SELECT DISTINCT supplier
+                FROM invoices
+                WHERE supplier LIKE ?
+                ORDER BY supplier
+                """,
+                (f"%{query}%",),
+            ).fetchall()
+        ]
+
+        exact = [s for s in suppliers if s.lower() == query.lower()]
+
+        if len(suppliers) > 1 and not exact:
+            return {
+                "invoices": [],
+                "count": 0,
+                "error": (
+                    f"{query!r} matches more than one supplier: "
+                    f"{', '.join(suppliers)}. Ask the user which one "
+                    "they mean."
+                ),
+                "matching_suppliers": suppliers,
+            }
+
         rows = connection.execute(
             """
             SELECT *
@@ -21,7 +49,7 @@ def search_invoices(supplier: str, limit: int = 10) -> dict:
             ORDER BY invoice_date DESC
             LIMIT ?
             """,
-            (f"%{supplier.strip()}%", limit),
+            (exact[0] if exact else f"%{query}%", limit),
         ).fetchall()
 
     invoices = [dict(row) for row in rows]
