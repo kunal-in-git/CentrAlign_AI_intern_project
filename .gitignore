@@ -1,0 +1,58 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test / coverage caches
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Environment & secrets ----------
+# Real config stays local; commit a .env.example instead.
+.env
+.env.*
+!.env.example
+
+# ---------- Local data ----------
+# SQLite database is created and seeded by init_db() on startup.
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# ---------- Node / frontend ----------
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- Logs ----------
+logs/
+*.log
+
+# ---------- Editors & OS ----------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,16 @@
+# Versions pinned to the environment the prototype was built and tested with.
+
+# API server
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.1
+
+# Agent (LangChain v1 create_agent on LangGraph, local LLM via Ollama)
+langchain==1.4.5
+langchain-ollama==1.1.0
+
+# Config
+python-dotenv==1.2.4
+
+# Testing
+pytest==9.1.1
